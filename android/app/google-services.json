@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "609504616983",
+    "project_id": "flutterblogwithmultiimage",
+    "storage_bucket": "flutterblogwithmultiimage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609504616983:android:1fb06e9e6a4e66ad28b252",
+        "android_client_info": {
+          "package_name": "com.ishworpanta.flutter_multi_image_bloc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "609504616983-l01cuq209n2iil8nhngf6gnfthcrb9r7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ishworpanta.flutter_multi_image_bloc",
+            "certificate_hash": "eece8cf7f66443714f064c3d44446dcab9ff6b41"
+          }
+        },
+        {
+          "client_id": "609504616983-j93cglbp0c7gnfd4ibjf72js6n07npch.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcBOJpF5WCRQOALVhYkCJjK6hm_X7lQ2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "609504616983-j93cglbp0c7gnfd4ibjf72js6n07npch.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
