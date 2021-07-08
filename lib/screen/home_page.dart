@@ -7,12 +7,19 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Multi Image Picker With Bloc'),
+        title: const Text('Multi Image Picker With Bloc'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.add_a_photo_outlined),
+            ),
+          )
+        ],
       ),
-      body: Container(
-        child: Center(
-          child: Text('Multi Image Picker With Bloc'),
-        ),
+      body: const Center(
+        child: Text('Multi Image Picker With Bloc'),
       ),
     );
   }

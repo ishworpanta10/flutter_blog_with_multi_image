@@ -7,7 +7,7 @@ class UploadPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Choose Multiple Images'),
+        title: const Text('Choose Multiple Images'),
       ),
       body: Container(),
     );
