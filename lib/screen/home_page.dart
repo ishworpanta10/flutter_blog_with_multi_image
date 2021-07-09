@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../our_bloc/blog_upload_bloc.dart';
 import '../our_bloc/image_picked_bloc.dart';
 import 'upload_page.dart';
 
@@ -22,7 +23,10 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (ctx) => BlocProvider.value(
                       value: context.read<ImagePickedBloc>(),
-                      child: UploadPage(),
+                      child: BlocProvider.value(
+                        value: context.read<BlogUploadBloc>(),
+                        child: UploadPage(),
+                      ),
                     ),
                   ),
                 );

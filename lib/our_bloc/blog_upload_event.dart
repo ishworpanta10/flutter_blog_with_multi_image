@@ -6,9 +6,9 @@ abstract class BlogUploadEvent extends Equatable {
 }
 
 class BlogUploadFirstEvent extends BlogUploadEvent {
-  BlogUploadFirstEvent({required this.imageList});
-  final List<String> imageList;
+  BlogUploadFirstEvent({required this.blogModel});
+  final BlogModel blogModel;
 
   @override
-  List<Object?> get props => [imageList];
+  List<Object?> get props => [blogModel];
 }
