@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_multi_image_bloc/services/firebase_storage_service.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../model/blog_model.dart';
 import '../services/firebase_firestore_service.dart';
+import '../services/firebase_storage_service.dart';
 
 part 'blog_upload_event.dart';
 part 'blog_upload_state.dart';

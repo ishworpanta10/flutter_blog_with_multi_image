@@ -27,7 +27,7 @@ class WelcomePage extends StatelessWidget {
           create: (_) => ImagePickedBloc(),
         )
       ],
-      child: const HomePage(),
+      child: HomePage(),
     );
   }
 }

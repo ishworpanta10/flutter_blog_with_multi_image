@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as Path;
+import 'package:path/path.dart' as path;
 
 class FirebaseStorageService {
   static Future<firebase_storage.UploadTask?> uploadImage(
@@ -25,7 +25,7 @@ class FirebaseStorageService {
       firebase_storage.Reference ref;
       ref = firebase_storage.FirebaseStorage.instance
           .ref()
-          .child('images/${Path.basename(file.path)}');
+          .child('images/${path.basename(file.path)}');
 
       await ref.putFile(File(file.path)).whenComplete(() async {
         await ref.getDownloadURL().then(imageUrlList.add);

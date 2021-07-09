@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../model/blog_model.dart';
 import '../our_bloc/blog_upload_bloc.dart';
 import '../our_bloc/image_picked_bloc.dart';
+import '../services/firebase_firestore_service.dart';
+import 'single_model_ui.dart';
 import 'upload_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
+
+  final FirebaseFirestoreService _firebaseFirestoreService =
+      FirebaseFirestoreService();
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +44,36 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      body: const Center(
-        child: Text('Multi Image Picker With Bloc'),
+      body: StreamBuilder<List<BlogModel>>(
+        stream: _firebaseFirestoreService.getStreamOfBlogList(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            final data = snapshot.data;
+
+            if (data != null) {
+              return ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  final blogModel = data[index];
+                  return SingleModelUI(
+                    blogModel: blogModel,
+                  );
+                },
+              );
+            } else {
+              return const Center(
+                child: Text('Something went wrong ....'),
+              );
+            }
+          }
+          return const Center(
+            child: Text('Loading ....'),
+          );
+        },
       ),
     );
   }

@@ -40,6 +40,7 @@ class _UploadPageState extends State<UploadPage> {
         if (blogUploadState is BlogUploadProgress) {
           // BotToast.showLoading();
           showDialog(
+            barrierDismissible: false,
             context: context,
             builder: (context) => const CustomDialog(
               message: 'Adding Blog ....',
@@ -126,13 +127,13 @@ class _UploadPageState extends State<UploadPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: TextFormField(
-                  validator: (value) {
-                    return value == null
-                        ? "Blog subtitle can't be empty "
-                        : value.isEmpty
-                            ? 'Subtitle can not be empty'
-                            : null;
-                  },
+                  // validator: (value) {
+                  //   return value == null
+                  //       ? "Blog subtitle can't be empty "
+                  //       : value.isEmpty
+                  //           ? 'Subtitle can not be empty'
+                  //           : null;
+                  // },
                   controller: _textSubTitleEditingController,
                   decoration: const InputDecoration(hintText: 'Blog Subtitle'),
                 ),
@@ -182,7 +183,8 @@ class _UploadPageState extends State<UploadPage> {
 
   Future<void> _chooseImage(BuildContext context) async {
     try {
-      final pickedFile = await picker.getImage(source: ImageSource.gallery);
+      final pickedFile =
+          await picker.getImage(source: ImageSource.gallery, imageQuality: 60);
       if (pickedFile != null) {
         BlocProvider.of<ImagePickedBloc>(context).add(pickedFile);
       }

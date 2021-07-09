@@ -11,7 +11,7 @@ class BlogModel {
       id: json['id'],
       title: json['title'],
       subTitle: json['subTitle'],
-      imageList: ['imageList'],
+      imageList: json['imageList'].cast<String>(),
     );
   }
 

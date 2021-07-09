@@ -16,4 +16,20 @@ class FirebaseFirestoreService {
           blogModel.toMap(),
         );
   }
+
+  Stream<List<BlogModel>> getStreamOfBlogList() {
+    //collection
+    final blogCollection =
+        firebaseFirestore.collection(FirbaseCollectionConstants.blogCollection);
+    //snapdata
+    return blogCollection.snapshots().map((querySnap) {
+      //QuerySnapshot<Map<String, dynamic>>
+      return querySnap.docs.map((queryDocSnap) {
+        // QueryDocumentSnapshot<Map<String, dynamic>> queryDocSnap
+        final data = queryDocSnap.data();
+        data.putIfAbsent('id', () => queryDocSnap.id);
+        return BlogModel.fromMap(data);
+      }).toList();
+    });
+  }
 }
