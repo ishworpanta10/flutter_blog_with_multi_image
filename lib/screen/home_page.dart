@@ -14,39 +14,46 @@ class HomePage extends StatelessWidget {
   final FirebaseFirestoreService _firebaseFirestoreService =
       FirebaseFirestoreService();
 
+  Future<void> _handleUploadEvent(BuildContext context) async => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => BlocProvider.value(
+            value: context.read<ImagePickedBloc>(),
+            child: BlocProvider.value(
+              value: context.read<BlogUploadBloc>(),
+              child: UploadPage(),
+            ),
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Multi Image Picker With Bloc'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (ctx) => BlocProvider.value(
-                      value: context.read<ImagePickedBloc>(),
-                      child: BlocProvider.value(
-                        value: context.read<BlogUploadBloc>(),
-                        child: UploadPage(),
-                      ),
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.add_a_photo_outlined,
-              ),
-            ),
-          )
-        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _handleUploadEvent(context);
+        },
+        child: const Icon(Icons.add),
       ),
       body: StreamBuilder<List<BlogModel>>(
         stream: _firebaseFirestoreService.getStreamOfBlogList(),
         builder: (context, snapshot) {
+          if (snapshot.data!.isEmpty) {
+            return Center(
+              child: GestureDetector(
+                onTap: () {
+                  _handleUploadEvent(context);
+                },
+                child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: const Text('No Blog Yet, Add Blog')),
+              ),
+            );
+          }
           if (!snapshot.hasData) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -70,9 +77,6 @@ class HomePage extends StatelessWidget {
               );
             }
           }
-          return const Center(
-            child: Text('Loading ....'),
-          );
         },
       ),
     );

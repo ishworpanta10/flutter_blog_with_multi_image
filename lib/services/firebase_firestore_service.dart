@@ -22,7 +22,13 @@ class FirebaseFirestoreService {
     final blogCollection =
         firebaseFirestore.collection(FirbaseCollectionConstants.blogCollection);
     //snapdata
-    return blogCollection.snapshots().map((querySnap) {
+    return blogCollection
+        .orderBy(
+          'createdAt',
+          descending: true,
+        )
+        .snapshots()
+        .map((querySnap) {
       //QuerySnapshot<Map<String, dynamic>>
       return querySnap.docs.map((queryDocSnap) {
         // QueryDocumentSnapshot<Map<String, dynamic>> queryDocSnap
