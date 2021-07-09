@@ -31,6 +31,8 @@ class _UploadPageState extends State<UploadPage> {
     Navigator.pop(context);
   }
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<BlogUploadBloc, BlogUploadState>(
@@ -69,25 +71,28 @@ class _UploadPageState extends State<UploadPage> {
                 builder: (context, imagePickedState) {
                   return IconButton(
                     onPressed: () {
-                      final imageList =
-                          imagePickedState.map((e) => e.path).toList();
-                      final blogTitle = _textTitleEditingController.text;
-                      final blogSubTitle = _textSubTitleEditingController.text;
+                      if (_formKey.currentState!.validate()) {
+                        final imageList =
+                            imagePickedState.map((e) => e.path).toList();
+                        final blogTitle = _textTitleEditingController.text;
+                        final blogSubTitle =
+                            _textSubTitleEditingController.text;
 
-                      final blogModel = BlogModel(
-                        title: blogTitle,
-                        subTitle: blogSubTitle,
-                        imageList: imageList,
-                      );
+                        final blogModel = BlogModel(
+                          title: blogTitle,
+                          subTitle: blogSubTitle,
+                          imageList: imageList,
+                        );
 
-                      BlocProvider.of<BlogUploadBloc>(context).add(
-                        BlogUploadFirstEvent(
-                          blogModel: blogModel,
-                          pickedFileList: imagePickedState,
-                        ),
-                      );
+                        BlocProvider.of<BlogUploadBloc>(context).add(
+                          BlogUploadFirstEvent(
+                            blogModel: blogModel,
+                            pickedFileList: imagePickedState,
+                          ),
+                        );
 
-                      context.read<ImagePickedBloc>().add(null);
+                        context.read<ImagePickedBloc>().add(null);
+                      }
                     },
                     icon: const Icon(Icons.upload_sharp),
                   );
@@ -96,61 +101,80 @@ class _UploadPageState extends State<UploadPage> {
             )
           ],
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: TextFormField(
-                controller: _textTitleEditingController,
-                decoration: const InputDecoration(
-                  hintText: 'Blog Title',
+        body: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: TextFormField(
+                  controller: _textTitleEditingController,
+                  validator: (value) {
+                    return value == null
+                        ? "Blog title can't be empty "
+                        : value.isEmpty
+                            ? 'title can not be empty'
+                            : null;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Blog Title',
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: TextFormField(
-                controller: _textSubTitleEditingController,
-                decoration: const InputDecoration(hintText: 'Blog Subtitle'),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: TextFormField(
+                  validator: (value) {
+                    return value == null
+                        ? "Blog subtitle can't be empty "
+                        : value.isEmpty
+                            ? 'Subtitle can not be empty'
+                            : null;
+                  },
+                  controller: _textSubTitleEditingController,
+                  decoration: const InputDecoration(hintText: 'Blog Subtitle'),
+                ),
               ),
-            ),
-            Expanded(
-              child: BlocBuilder<ImagePickedBloc, List<PickedFile>>(
-                builder: (context, pickedImageState) {
-                  return GridView.builder(
-                    itemCount: pickedImageState.length + 1,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3),
-                    itemBuilder: (context, index) {
-                      return index == 0
-                          ? Center(
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                color: Colors.grey.withOpacity(0.2),
-                                child: IconButton(
-                                  onPressed: () => _chooseImage(context),
-                                  icon: const Icon(Icons.add_a_photo),
-                                ),
-                              ),
-                            )
-                          : Container(
-                              margin: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: FileImage(
-                                    File(pickedImageState[index - 1].path),
+              Expanded(
+                child: BlocBuilder<ImagePickedBloc, List<PickedFile>>(
+                  builder: (context, pickedImageState) {
+                    return GridView.builder(
+                      itemCount: pickedImageState.length + 1,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3),
+                      itemBuilder: (context, index) {
+                        return index == 0
+                            ? Center(
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  color: Colors.grey.withOpacity(0.2),
+                                  child: IconButton(
+                                    onPressed: () => _chooseImage(context),
+                                    icon: const Icon(Icons.add_a_photo),
                                   ),
-                                  fit: BoxFit.cover,
                                 ),
-                              ),
-                            );
-                    },
-                  );
-                },
+                              )
+                            : Container(
+                                margin: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: FileImage(
+                                      File(pickedImageState[index - 1].path),
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
