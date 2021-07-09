@@ -48,6 +48,8 @@ class BlogUploadBloc extends Bloc<BlogUploadEvent, BlogUploadState> {
         title: event.blogModel.title,
         subTitle: event.blogModel.subTitle,
         imageList: imageList,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       );
       //  uploading data to firebase database
       await firebaseFirestoreService.uploadBlogDataToFirebase(blogModel);

@@ -7,15 +7,18 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: Row(
-        children: [
-          const CircularProgressIndicator(),
-          const SizedBox(
-            width: 30,
-          ),
-          Text(message ?? 'Loading ....'),
-        ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AlertDialog(
+        content: Row(
+          children: [
+            const CircularProgressIndicator(),
+            const SizedBox(
+              width: 30,
+            ),
+            Text(message ?? 'Loading ....'),
+          ],
+        ),
       ),
     );
   }

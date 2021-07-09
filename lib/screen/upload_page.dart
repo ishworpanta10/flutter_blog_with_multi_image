@@ -58,123 +58,127 @@ class _UploadPageState extends State<UploadPage> {
           Navigator.pop(context);
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Choose Multiple Images'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: _resetBloc,
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: BlocBuilder<ImagePickedBloc, List<PickedFile>>(
-                builder: (context, imagePickedState) {
-                  return IconButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        final imageList =
-                            imagePickedState.map((e) => e.path).toList();
-                        final blogTitle = _textTitleEditingController.text;
-                        final blogSubTitle =
-                            _textSubTitleEditingController.text;
-
-                        final blogModel = BlogModel(
-                          title: blogTitle,
-                          subTitle: blogSubTitle,
-                          imageList: imageList,
-                        );
-
-                        BlocProvider.of<BlogUploadBloc>(context).add(
-                          BlogUploadFirstEvent(
-                            blogModel: blogModel,
-                            pickedFileList: imagePickedState,
-                          ),
-                        );
-
-                        context.read<ImagePickedBloc>().add(null);
-                      }
-                    },
-                    icon: const Icon(Icons.upload_sharp),
-                  );
-                },
-              ),
-            )
-          ],
-        ),
-        body: Form(
-          key: _formKey,
-          child: Column(
-            children: [
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Choose Multiple Images'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: _resetBloc,
+            ),
+            actions: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: TextFormField(
-                  controller: _textTitleEditingController,
-                  validator: (value) {
-                    return value == null
-                        ? "Blog title can't be empty "
-                        : value.isEmpty
-                            ? 'title can not be empty'
-                            : null;
-                  },
-                  decoration: const InputDecoration(
-                    hintText: 'Blog Title',
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: TextFormField(
-                  // validator: (value) {
-                  //   return value == null
-                  //       ? "Blog subtitle can't be empty "
-                  //       : value.isEmpty
-                  //           ? 'Subtitle can not be empty'
-                  //           : null;
-                  // },
-                  controller: _textSubTitleEditingController,
-                  decoration: const InputDecoration(hintText: 'Blog Subtitle'),
-                ),
-              ),
-              Expanded(
+                padding: const EdgeInsets.all(12),
                 child: BlocBuilder<ImagePickedBloc, List<PickedFile>>(
-                  builder: (context, pickedImageState) {
-                    return GridView.builder(
-                      itemCount: pickedImageState.length + 1,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3),
-                      itemBuilder: (context, index) {
-                        return index == 0
-                            ? Center(
-                                child: Container(
-                                  padding: const EdgeInsets.all(20),
-                                  color: Colors.grey.withOpacity(0.2),
-                                  child: IconButton(
-                                    onPressed: () => _chooseImage(context),
-                                    icon: const Icon(Icons.add_a_photo),
-                                  ),
-                                ),
-                              )
-                            : Container(
-                                margin: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: FileImage(
-                                      File(pickedImageState[index - 1].path),
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              );
+                  builder: (context, imagePickedState) {
+                    return IconButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          final imageList =
+                              imagePickedState.map((e) => e.path).toList();
+                          final blogTitle = _textTitleEditingController.text;
+                          final blogSubTitle =
+                              _textSubTitleEditingController.text;
+
+                          final blogModel = BlogModel(
+                            title: blogTitle,
+                            subTitle: blogSubTitle,
+                            imageList: imageList,
+                          );
+
+                          BlocProvider.of<BlogUploadBloc>(context).add(
+                            BlogUploadFirstEvent(
+                              blogModel: blogModel,
+                              pickedFileList: imagePickedState,
+                            ),
+                          );
+
+                          context.read<ImagePickedBloc>().add(null);
+                        }
                       },
+                      icon: const Icon(Icons.upload_sharp),
                     );
                   },
                 ),
-              ),
+              )
             ],
+          ),
+          body: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: TextFormField(
+                    controller: _textTitleEditingController,
+                    validator: (value) {
+                      return value == null
+                          ? "Blog title can't be empty "
+                          : value.isEmpty
+                              ? 'title can not be empty'
+                              : null;
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'Blog Title',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: TextFormField(
+                    // validator: (value) {
+                    //   return value == null
+                    //       ? "Blog subtitle can't be empty "
+                    //       : value.isEmpty
+                    //           ? 'Subtitle can not be empty'
+                    //           : null;
+                    // },
+                    controller: _textSubTitleEditingController,
+                    decoration:
+                        const InputDecoration(hintText: 'Blog Subtitle'),
+                  ),
+                ),
+                Expanded(
+                  child: BlocBuilder<ImagePickedBloc, List<PickedFile>>(
+                    builder: (context, pickedImageState) {
+                      return GridView.builder(
+                        itemCount: pickedImageState.length + 1,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3),
+                        itemBuilder: (context, index) {
+                          return index == 0
+                              ? Center(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(20),
+                                    color: Colors.grey.withOpacity(0.2),
+                                    child: IconButton(
+                                      onPressed: () => _chooseImage(context),
+                                      icon: const Icon(Icons.add_a_photo),
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  margin: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: FileImage(
+                                        File(pickedImageState[index - 1].path),
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
