@@ -10,12 +10,10 @@ class BlogUploadInitial extends BlogUploadState {}
 class BlogUploadProgress extends BlogUploadState {}
 
 class BlogUploadSuccess extends BlogUploadState {
-  BlogUploadSuccess({required this.imageList, this.title, this.subTitle});
-  final List<String> imageList;
-  final String? title;
-  final String? subTitle;
+  BlogUploadSuccess({required this.blogModel});
+  final BlogModel blogModel;
   @override
-  List<Object?> get props => [imageList, title, subTitle];
+  List<Object?> get props => [blogModel];
 }
 
 class BlogUploadError extends BlogUploadState {

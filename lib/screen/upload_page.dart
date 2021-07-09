@@ -49,7 +49,8 @@ class _UploadPageState extends State<UploadPage> {
         } else if (blogUploadState is BlogUploadSuccess) {
           Navigator.of(context, rootNavigator: true).pop();
           BotToast.closeAllLoading();
-          BotToast.showText(text: 'Blog Added');
+          BotToast.showText(
+              text: '${blogUploadState.blogModel.title} Blog Added');
 
           Navigator.pop(context);
         }
@@ -72,13 +73,18 @@ class _UploadPageState extends State<UploadPage> {
                           imagePickedState.map((e) => e.path).toList();
                       final blogTitle = _textTitleEditingController.text;
                       final blogSubTitle = _textSubTitleEditingController.text;
+
                       final blogModel = BlogModel(
                         title: blogTitle,
                         subTitle: blogSubTitle,
                         imageList: imageList,
                       );
+
                       BlocProvider.of<BlogUploadBloc>(context).add(
-                        BlogUploadFirstEvent(blogModel: blogModel),
+                        BlogUploadFirstEvent(
+                          blogModel: blogModel,
+                          pickedFileList: imagePickedState,
+                        ),
                       );
 
                       context.read<ImagePickedBloc>().add(null);
@@ -133,7 +139,9 @@ class _UploadPageState extends State<UploadPage> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: FileImage(
-                                      File(pickedImageState[index - 1].path)),
+                                    File(pickedImageState[index - 1].path),
+                                  ),
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             );
