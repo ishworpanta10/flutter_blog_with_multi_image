@@ -14,7 +14,9 @@ class SingleModelUI extends StatelessWidget {
       children: [
         ListTile(
           title: Text(blogModel.title),
-          subtitle: Text(blogModel.subTitle ?? ""),
+          subtitle: blogModel.subTitle!.isEmpty
+              ? null
+              : Text(blogModel.subTitle ?? ""),
         ),
         if (blogModel.imageList.isEmpty)
           const SizedBox()
